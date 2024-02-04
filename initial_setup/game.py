@@ -7,7 +7,7 @@ class Game:
         pygame.init()
       
         self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode((RES))#, pygame.FULLSCREEN|pygame.SCALED)
+        self.screen = pygame.display.set_mode((RES), pygame.FULLSCREEN|pygame.SCALED)
         self.font = pygame.font.Font(FONT, TILESIZE) #int(TILESIZE))
         self.running = True
         #initialise first state and state stack
@@ -122,6 +122,9 @@ class Game:
         rect = surf.get_rect(topleft = pos)
         self.screen.blit(surf, rect)
 
+    def actions(self):
+        self.stack[-1].actions(self.get_events)
+
     def update(self, dt):
         self.stack[-1].update(dt)
  
@@ -140,5 +143,5 @@ if __name__ == "__main__":
     game = Game()
     while game.running:
         game.main_loop()
-        #cProfile.run("game.main_loop()", sort="cumulative")
+       
 
