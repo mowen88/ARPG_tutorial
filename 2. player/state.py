@@ -50,10 +50,10 @@ class NPC(pygame.sprite.Sprite):
 		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.5,- self.rect.height * 0.5)
 		self.old_pos = self.pos.copy()
 		self.old_hitbox = self.hitbox.copy()
-		self.speed = 80
-		self.force = pygame.math.Vector2()
+		self.speed = 60
+		self.acc = pygame.math.Vector2()
 		self.vel = pygame.math.Vector2()
-		self.friction = -20
+		self.friction = -15
 		self.facing = 0
 		self.alive = True
 		
@@ -68,21 +68,19 @@ class NPC(pygame.sprite.Sprite):
 
 	def input(self):
 
-		keys = pygame.key.get_pressed()
-
-		if keys[pygame.K_LEFT]:
-			self.force.x = -2000
-		elif keys[pygame.K_RIGHT]:
-			self.force.x = 2000
+		if ACTIONS['left']:
+			self.acc.x = -2000
+		elif ACTIONS['right']:
+			self.acc.x = 2000
 		else:
-			self.force.x = 0
+			self.acc.x = 0
 
-		if keys[pygame.K_UP]:
-			self.force.y = -2000
-		elif keys[pygame.K_DOWN]:
-			self.force.y = 2000
+		if ACTIONS['up']:
+			self.acc.y = -2000
+		elif ACTIONS['down']:
+			self.acc.y = 2000
 		else:
-			self.force.y = 0
+			self.acc.y = 0
 
 	def animate(self, state, speed, loop=True):
 
@@ -100,15 +98,15 @@ class NPC(pygame.sprite.Sprite):
 	def physics(self, dt):
 
 		# x direction
-		self.force.x += self.vel.x * self.friction
-		self.vel.x += self.force.x * dt
+		self.acc.x += self.vel.x * self.friction
+		self.vel.x += self.acc.x * dt
 		self.pos.x += self.vel.x * dt + (0.5 * self.vel.x) * dt
 		self.hitbox.centerx = round(self.pos.x)
 		self.rect.centerx = self.hitbox.centerx
 
 		#y direction
-		self.force.y += self.vel.y * self.friction
-		self.vel.y += self.force.y * dt
+		self.acc.y += self.vel.y * self.friction
+		self.vel.y += self.acc.y * dt
 		self.pos.y += self.vel.y * dt + (0.5 * self.vel.y) * dt
 		self.hitbox.centery = round(self.pos.y)
 		self.rect.centery = self.hitbox.centery
@@ -117,8 +115,10 @@ class NPC(pygame.sprite.Sprite):
 			self.vel = self.vel.normalize() * self.speed
 
 	def update(self, dt):
-
-		self.animate('run', 15 * dt)
+		if self.vel.magnitude() < 1:
+			self.animate('idle', 15 * dt, False)
+		else:
+			self.animate('run', 15 * dt)
 		self.input()
 		self.physics(dt)
 
@@ -134,8 +134,11 @@ class Camera(pygame.sprite.Group):
         self.scene = scene
         self.offset = pygame.math.Vector2()
 
-    def draw(self, target, group):
-        self.game.screen.fill(RED)
+    def update(self, dt):
+    	pass
+
+    def draw(self, screen, target, group):
+        screen.fill(RED)
 
         self.offset = target.rect.center - RES/2
 
@@ -162,7 +165,7 @@ class Scene(State):
 		# create all objects in the scene using tmx data
 		self.tmx_data = load_pygame(f'scenes/{self.current_scene}/{self.current_scene}.tmx')
 
-		self.create_scene_instances()
+		self.create_scene()
 
 	def get_scene_size(self):
 		with open(f'../scenes/{self.current_scene}/{self.current_scene}_blocks.csv', newline='') as csvfile:
@@ -172,7 +175,7 @@ class Scene(State):
 		        cols = len(row)
 		return (cols * TILESIZE, rows * TILESIZE)
 
-	def create_scene_instances(self):
+	def create_scene(self):
 
 		layers = []
 		for layer in self.tmx_data.layers:
@@ -196,12 +199,11 @@ class Scene(State):
 
 	def draw(self, screen):
 
-		self.camera.draw(self.player, self.drawn_sprites)
+		self.camera.draw(screen, self.player, self.drawn_sprites)
 		self.debug([str('FPS: '+ str(round(self.game.clock.get_fps(), 2))),
-					str('force: '+ str(round(self.player.force, 2))),
+					str('acc: '+ str(round(self.player.acc, 2))),
 					str('vel: '+ str(round(self.player.vel, 2))),
 					None,])
-
 
 class SplashScreen(State):
 	def __init__(self, game):
