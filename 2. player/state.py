@@ -122,7 +122,6 @@ class NPC(pygame.sprite.Sprite):
 		self.input()
 		self.physics(dt)
 
-
 class Player(NPC):
 	def __init__(self, game, scene, groups, pos, name, z):
 		super().__init__(game, scene, groups, pos, name, z)
@@ -136,7 +135,7 @@ class Camera(pygame.sprite.Group):
         self.offset = pygame.math.Vector2()
 
     def draw(self, target, group):
-        self.game.screen.fill(LIGHT_GREY)
+        self.game.screen.fill(RED)
 
         self.offset = target.rect.center - RES/2
 
