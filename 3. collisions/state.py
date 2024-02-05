@@ -53,11 +53,9 @@ class NPC(pygame.sprite.Sprite):
 		self.facing = 0
 		
 	def import_images(self):
-		path = f'assets/characters/{self.name}/'
-		self.animations = self.game.get_animation_states(path)
+		self.animations = self.game.get_animation_states(f'assets/characters/{self.name}/')
 		for animation in self.animations.keys():
-			full_path = path + animation
-			self.animations[animation] = self.game.get_images(full_path)
+			self.animations[animation] = self.game.get_images(f'assets/characters/{self.name}/' + animation)
 
 	def animate(self, state, speed, loop=True):
 
@@ -118,7 +116,6 @@ class NPC(pygame.sprite.Sprite):
 			self.animate('idle', 15 * dt, False)
 		else:
 			self.animate('run', 15 * dt)
-		self.input()
 		self.physics(dt)
 
 class Player(NPC):
@@ -135,6 +132,14 @@ class Player(NPC):
 		elif ACTIONS['down']: self.acc.y = 2000
 		else: self.acc.y = 0
 
+	def update(self, dt):
+		if self.vel.magnitude() < 1:
+			self.animate('idle', 15 * dt, False)
+		else:
+			self.animate('run', 15 * dt)
+		self.input()
+		self.physics(dt)
+
 class Camera(pygame.sprite.Group):
     def __init__(self):
 
@@ -145,8 +150,8 @@ class Camera(pygame.sprite.Group):
     def draw(self, screen, target, group):
         screen.fill(RED)
 
-        self.offset.x += (target.rect.centerx - HALF_WIDTH - (HALF_WIDTH - pygame.mouse.get_pos()[0])/2 - self.offset.x)/self.camera_lag
-        self.offset.y += (target.rect.centery - HALF_HEIGHT - (HALF_HEIGHT - pygame.mouse.get_pos()[1])/2 - self.offset.y)/self.camera_lag
+        self.offset.x += (target.rect.centerx - HALF_WIDTH - (HALF_WIDTH - pygame.mouse.get_pos()[0])/3 - self.offset.x)/self.camera_lag
+        self.offset.y += (target.rect.centery - HALF_HEIGHT - (HALF_HEIGHT - pygame.mouse.get_pos()[1])/3 - self.offset.y)/self.camera_lag
 
         #self.offset = target.rect.center - RES/2
         self.visible_window.center = target.rect.center
@@ -171,9 +176,10 @@ class Scene(State):
 		self.update_sprites = pygame.sprite.Group()
 		self.block_sprites = pygame.sprite.Group()
 
+		self.npc = NPC(self.game, self, [self.update_sprites, self.drawn_sprites], (150,120), 'player', LAYERS['player'])
+
 		# create all objects in the scene using tmx data
 		self.tmx_data = load_pygame(f'scenes/{self.current_scene}/{self.current_scene}.tmx')
-
 		self.create_scene()
 
 	def get_scene_size(self):
@@ -191,7 +197,6 @@ class Scene(State):
 			layers.append(layer.name)
 
 		if 'blocks' in layers:
-
 			for x, y, tile in self.tmx_data.get_layer_by_name('blocks').tiles():
 				surf = self.tmx_data.get_tile_image(x,y,0)
 				gid = self.tmx_data.get_tile_gid(x,y,0)
@@ -201,17 +206,25 @@ class Scene(State):
 			for obj in self.tmx_data.get_layer_by_name('entries'):
 				if obj.name == self.entry_point:
 					self.player = Player(self.game, self, [self.update_sprites, self.drawn_sprites], (obj.x, obj.y), 'player', LAYERS['player'])
-
-	def update(self, dt):
-		self.update_sprites.update(dt)
+					self.target = self.player
 
 	def debug(self, debug_list):
 		for index, name in enumerate(debug_list):
 			self.game.render_text(name, WHITE, self.game.font, (10, 15 * index))
 
+	def update(self, dt):
+		self.update_sprites.update(dt)
+
+		if ACTIONS['space']:
+			ACTIONS['space'] = False
+			if self.target == self.npc:
+				self.target = self.player
+			else:
+				self.target = self.npc
+
 	def draw(self, screen):
 
-		self.camera.draw(screen, self.player, self.drawn_sprites)
+		self.camera.draw(screen, self.target, self.drawn_sprites)
 		self.debug([str('FPS: '+ str(round(self.game.clock.get_fps(), 2))),
 					str('acc: '+ str(round(self.player.acc, 2))),
 					str('vel: '+ str(round(self.player.vel, 2))),
@@ -224,6 +237,7 @@ class SplashScreen(State):
 	def update(self, dt):
 		if ACTIONS['space']:
 			Scene(self.game).enter_state()
+			ACTIONS['space'] = False
 
 	def draw(self, screen):
 		screen.fill(BLUE)
