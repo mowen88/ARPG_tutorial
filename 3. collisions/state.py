@@ -14,8 +14,7 @@ class State:
 		pass
 
 	def enter_state(self):
-		if len(self.game.stack) > 1:
-			self.prev_state = self.game.stack[-1]
+		if len(self.game.stack) > 1: self.prev_state = self.game.stack[-1]
 		self.game.stack.append(self)
 
 	def exit_state(self):
@@ -143,7 +142,7 @@ class Camera(pygame.sprite.Group):
         self.scene = scene
         self.offset = pygame.math.Vector2()
         self.visible_window = pygame.Rect(0,0,WIDTH*2,HEIGHT*2)
-        self.camera_lag = 100
+        #self.camera_lag = 100
 
     def update(self, dt):
     	pass#self.camera_lag *= dt
@@ -210,7 +209,6 @@ class Scene(State):
 
 	def update(self, dt):
 		self.update_sprites.update(dt)
-		self.camera.update(dt)
 
 	def debug(self, debug_list):
 		for index, name in enumerate(debug_list):
