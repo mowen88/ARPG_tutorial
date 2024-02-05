@@ -136,31 +136,26 @@ class Player(NPC):
 		else: self.acc.y = 0
 
 class Camera(pygame.sprite.Group):
-    def __init__(self, game, scene):
+    def __init__(self):
 
-        self.game = game
-        self.scene = scene
         self.offset = pygame.math.Vector2()
         self.visible_window = pygame.Rect(0,0,WIDTH*2,HEIGHT*2)
-        #self.camera_lag = 100
-
-    def update(self, dt):
-    	pass#self.camera_lag *= dt
+        self.camera_lag = 500
 
     def draw(self, screen, target, group):
         screen.fill(RED)
 
-        # self.offset.x += (target.rect.centerx - HALF_WIDTH - (HALF_WIDTH - pygame.mouse.get_pos()[0])/3 - self.offset.x)/self.camera_lag
-        # self.offset.y += (target.rect.centery - HALF_HEIGHT - (HALF_HEIGHT - pygame.mouse.get_pos()[1])/3 - self.offset.y)/self.camera_lag
+        self.offset.x += (target.rect.centerx - HALF_WIDTH - (HALF_WIDTH - pygame.mouse.get_pos()[0])/2 - self.offset.x)/self.camera_lag
+        self.offset.y += (target.rect.centery - HALF_HEIGHT - (HALF_HEIGHT - pygame.mouse.get_pos()[1])/2 - self.offset.y)/self.camera_lag
 
-        self.offset = target.rect.center - RES/2
+        #self.offset = target.rect.center - RES/2
         self.visible_window.center = target.rect.center
 
         for layer in LAYERS.values():
             for sprite in group:
                 if sprite.z == layer and self.visible_window.contains(sprite.rect):
                     offset = sprite.rect.topleft - self.offset
-                    self.game.screen.blit(sprite.image, offset)
+                    screen.blit(sprite.image, offset)
 
 class Scene(State):
 	def __init__(self, game):
@@ -171,7 +166,7 @@ class Scene(State):
 		self.entry_point = '0'
 		self.exiting = False
 		
-		self.camera = Camera(self.game, self)
+		self.camera = Camera()
 		self.drawn_sprites = pygame.sprite.Group()
 		self.update_sprites = pygame.sprite.Group()
 		self.block_sprites = pygame.sprite.Group()
