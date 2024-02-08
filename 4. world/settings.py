@@ -8,14 +8,12 @@ WIDTH, HEIGHT = 400,224 #(384, 216)#(512, 288)#(320, 180)#(480, 270)#(640, 360)#
 INPUTS = {'escape':False, 'space':False,'up':False, 'down':False, 'left':False, 'right':False, 'e':False,
 			'tab':False, 'left_click':False, 'right_click':False, 'scroll_up':False, 'scroll_down':False, 'r':False}
 			
-COLOURS = {'black':(0,0,0), 'white':(255,255,255), 'red':(255,0,0), 'green':(0,255,0),'blue':(0,0,255)}
+COLOURS = {'black':(0,0,0), 'white':(255,255,255), 'red':(255,0,0), 'green':(0,255,0),'blue':(0,0,255), 'light green':(99,196,141)}
 
 
 LAYERS = {'background':0,
 		  'objects':1,
 		  'player':2,
 		  'particles':3,
-		  'liquid':4,
-		  'blocks':5,
-		  'secret_blocks':6,
-		  'foreground':7}
+		  'blocks':4,
+		  'foreground':5}

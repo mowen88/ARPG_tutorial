@@ -34,28 +34,28 @@ class SplashScreen(State):
 		screen.fill(COLOURS['blue'])
 		self.game.render_text('Press space', COLOURS['white'], self.game.font, (WIDTH/2, HEIGHT/2))
 
-class Camera(pygame.sprite.Group):
-    def __init__(self, game, scene):
-        super().__init__()
+# class Camera(pygame.sprite.Group):
+#     def __init__(self, game, scene):
+#         super().__init__()
 
-        self.game = game
-        self.scene = scene
-        self.offset = pygame.math.Vector2()
+#         self.game = game
+#         self.scene = scene
+#         self.offset = pygame.math.Vector2()
 
-    def update(self, dt):
-    	pass
+#     def update(self, dt):
+#     	pass
 
-    def draw(self, screen, target, group):
-        screen.fill(COLOURS['red'])
+#     def draw(self, screen, target, group):
+#         screen.fill(COLOURS['light green'])
 
-        self.offset.x = target.rect.centerx - WIDTH/2
-        self.offset.y = target.rect.centery - HEIGHT/2
+#         self.offset.x = target.rect.centerx - WIDTH/2
+#         self.offset.y = target.rect.centery - HEIGHT/2
 
-        for layer in LAYERS.values():
-            for sprite in group:
-                if sprite.z == layer: # and self.scene.visible_window.contains(sprite.rect):
-                    offset = sprite.rect.topleft - self.offset
-                    self.game.screen.blit(sprite.image, offset)
+#         for layer in LAYERS.values():
+#             for sprite in group:
+#                 if sprite.z == layer: # and self.scene.visible_window.contains(sprite.rect):
+#                     offset = sprite.rect.topleft - self.offset
+#                     self.game.screen.blit(sprite.image, offset)
 
 class Scene(State):
 	def __init__(self, game):
@@ -63,11 +63,11 @@ class Scene(State):
 
 		self.game = game
 		
-		self.camera = Camera(self.game, self)
+		# self.camera = Camera(self.game, self)
 		self.drawn_sprites = pygame.sprite.Group()
 		self.update_sprites = pygame.sprite.Group()
 
-		self.player = Player(self.game, self, [self.update_sprites, self.drawn_sprites], (100,100), 'player', LAYERS['player'])
+		self.player = Player(self.game, self, [self.update_sprites, self.drawn_sprites], (100,100), 'player')
 
 	def update(self, dt):
 		self.update_sprites.update(dt)
@@ -77,8 +77,9 @@ class Scene(State):
 			self.game.render_text(name, COLOURS['white'], self.game.font, (10, 15 * index), False)
 
 	def draw(self, screen):
-
-		self.camera.draw(screen, self.player, self.drawn_sprites)
+		screen.fill(COLOURS['light green'])
+		self.drawn_sprites.draw(screen)
+		#self.camera.draw(screen, self.player, self.drawn_sprites)
 		self.debug([
 					str('FPS: '+ str(round(self.game.clock.get_fps(), 2))),
 					str('vel x: ' + str(round(self.player.vel.x, 2))),

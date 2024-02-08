@@ -8,7 +8,7 @@ class Game:
       
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN|pygame.SCALED)
-        self.font = pygame.font.Font(FONT, TILESIZE) #int(TILESIZE))
+        self.font = pygame.font.Font(FONT, TILESIZE)
         self.running = True
         #initialise first state and state stack
         self.states = []
