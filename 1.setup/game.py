@@ -1,4 +1,4 @@
-import pygame, sys, os
+import pygame, sys
 from state import SplashScreen
 from settings import *
 
@@ -7,17 +7,22 @@ class Game:
         pygame.init()
       
         self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode((RES), pygame.FULLSCREEN|pygame.SCALED)
+        self.screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN|pygame.SCALED)
         self.font = pygame.font.Font(FONT, TILESIZE) #int(TILESIZE))
         self.running = True
         #initialise first state and state stack
-        self.stack = []
+        self.states = []
         self.splash_screen = SplashScreen(self)
-        self.stack.append(self.splash_screen)
+        self.states.append(self.splash_screen)
+ 
+    def render_text(self, text, colour, font, pos, centralised=True):
+        surf = font.render (str(text), False, colour)
+        rect = surf.get_rect(center = pos) if centralised else surf.get_rect(topleft = pos)
+        self.screen.blit(surf, rect)
 
-    def get_events(self):
-    	# mapping inputs to ACTIONS dictionary in global settings file, so they return true when key is pressed and false on key up.
-    	# this allows easy access to all keys using the global ACTIONS dictionary
+    def get_inputs(self):
+    	# mapping inputs to INPUTS dictionary in global settings file, so they return true when key is pressed and false on key up.
+    	# this allows easy access to all keys using the global INPUTS dictionary
         for event in pygame.event.get(): 
             if event.type == pygame.QUIT:
                 self.running = False
@@ -26,122 +31,74 @@ class Game:
                 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    ACTIONS['escape'] = True
+                    INPUTS['escape'] = True
                     self.running = False
-                elif event.key == pygame.K_e:
-                    ACTIONS['e'] = True
-                elif event.key == pygame.K_z:
-                    ACTIONS['z'] = True
-                elif event.key == pygame.K_x:
-                    ACTIONS['x'] = True
-                elif event.key == pygame.K_c:
-                    ACTIONS['c'] = True
-                elif event.key == pygame.K_TAB:
-                    ACTIONS['tab'] = True
                 elif event.key == pygame.K_SPACE:
-                    ACTIONS['space'] = True
+                    INPUTS['space'] = True
                 elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                    ACTIONS['left'] = True
+                    INPUTS['left'] = True
                 elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                    ACTIONS['right'] = True
+                    INPUTS['right'] = True
                 elif event.key == pygame.K_UP or event.key == pygame.K_w:
-                    ACTIONS['up'] = True
+                    INPUTS['up'] = True
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                    ACTIONS['down'] = True
+                    INPUTS['down'] = True
 
                
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_e:
-                    ACTIONS['e'] = False
-                elif event.key == pygame.K_z:
-                    ACTIONS['z'] = False
-                elif event.key == pygame.K_x:
-                    ACTIONS['x'] = False
-                elif event.key == pygame.K_c:
-                    ACTIONS['c'] = False
-                elif event.key == pygame.K_TAB:
-                    ACTIONS['tab'] = False
-                elif event.key == pygame.K_SPACE:
-                    ACTIONS['space'] = False 
+
+                if event.key == pygame.K_SPACE:
+                    INPUTS['space'] = False 
                 elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                    ACTIONS['left'] = False
+                    INPUTS['left'] = False
                 elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                    ACTIONS['right'] = False
+                    INPUTS['right'] = False
                 elif event.key == pygame.K_UP or event.key == pygame.K_w:
-                    ACTIONS['up'] = False
+                    INPUTS['up'] = False
                 elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                    ACTIONS['down'] = False
+                    INPUTS['down'] = False
 
             if event.type == pygame.MOUSEWHEEL:
                 if event.y == 1:
-                    ACTIONS['scroll_up'] = True
+                    INPUTS['scroll_up'] = True
                 elif event.y == -1:
-                    ACTIONS['scroll_down'] = True
+                    INPUTS['scroll_down'] = True
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    ACTIONS['left_click'] = True
+                    INPUTS['left_click'] = True
                 elif event.button == 3:
-                    ACTIONS['right_click'] = True
+                    INPUTS['right_click'] = True
                 elif event.button == 4:
-                    ACTIONS['scroll_down'] = True
+                    INPUTS['scroll_down'] = True
                 elif event.button == 2:
-                    ACTIONS['scroll_up'] = True
+                    INPUTS['scroll_up'] = True
 
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
-                    ACTIONS['left_click'] = False
+                    INPUTS['left_click'] = False
                 elif event.button == 3:
-                    ACTIONS['right_click'] = False
+                    INPUTS['right_click'] = False
                 elif event.button == 4:
-                    ACTIONS['scroll_down'] = False
+                    INPUTS['scroll_down'] = False
                 elif event.button == 2:
-                    ACTIONS['scroll_up'] = False
+                    INPUTS['scroll_up'] = False
 
-    def reset_keys(self):
-    	# a function that can bel called to reset all inputs to false
-        for action in ACTIONS:
-            ACTIONS[action] = False
+    def reset_inputs(self):
+        # a function that can be called to reset all inputs to false
+        for key in INPUTS:
+            INPUTS[key] = False
 
-    def get_animation_states(self, path):
-        file_dict = {}
-        for file_name in os.listdir(path):
-            file_dict.update({file_name:[]})
-        return file_dict
-
-    def get_images(self, path):
-        images = []
-        for file in os.listdir(path):
-            full_path = os.path.join(path, file)
-            img = pygame.image.load(full_path).convert_alpha()
-            images.append(img)
-        return images
- 
-    def render_text(self, text, colour, font, pos):
-        surf = font.render (str(text), False, colour)
-        rect = surf.get_rect(topleft = pos)
-        self.screen.blit(surf, rect)
-
-    def actions(self):
-        self.stack[-1].actions(self.get_events)
-
-    def update(self, dt):
-        self.stack[-1].update(dt)
- 
-    def draw(self, screen):
-        self.stack[-1].draw(screen)
-        #self.custom_cursor(screen)
-        pygame.display.flip()
-
-    def main_loop(self):
-        dt = self.clock.tick(60)/1000
-        self.get_events()
-        self.update(dt)
-        self.draw(self.screen)
+    def loop(self):
+        while self.running:
+            dt = self.clock.tick()/1000
+            self.get_inputs()
+            self.states[-1].update(dt)
+            self.states[-1].draw(self.screen)
+            pygame.display.flip()
         
 if __name__ == "__main__":
     game = Game()
-    while game.running:
-        game.main_loop()
+    game.loop()
        
 
