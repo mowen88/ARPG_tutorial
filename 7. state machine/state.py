@@ -1,8 +1,7 @@
 import pygame
 from settings import *
 from camera import Camera
-from npc import NPC
-from player import Player
+from characters import NPC, Player
 from objects import Object, Wall
 from pytmx.util_pygame import load_pygame
 

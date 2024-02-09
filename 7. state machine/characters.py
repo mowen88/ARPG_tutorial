@@ -1,24 +1,6 @@
 import pygame
 from settings import *
 
-class Idle:
-	def enter_state(self, npc):
-		if npc.vel.magnitude() > 1:
-			return Run()
-
-	def update(self, dt, npc):
-		npc.animate(f'idle_{npc.get_direction()}', 15 * dt)
-		npc.physics(dt)
-
-class Run:	
-	def enter_state(self, npc):
-		if npc.vel.magnitude() < 1:
-			return Idle()
-
-	def update(self, dt, npc):
-		npc.animate(f'run_{npc.get_direction()}', 15 * dt)
-		npc.physics(dt)
-
 class NPC(pygame.sprite.Sprite):
 	def __init__(self, game, scene, groups, pos, z, name):
 		super().__init__(groups)
@@ -51,7 +33,7 @@ class NPC(pygame.sprite.Sprite):
 		elif 225 <= angle < 315: return 'left'
 		else: return 'down'
 
-	def get_movement(self):
+	def movement(self):
 		if self.move['left']: self.acc.x = -2000
 		elif self.move['right']: self.acc.x = 2000
 		else: self.acc.x = 0
@@ -128,9 +110,43 @@ class NPC(pygame.sprite.Sprite):
 		else: self.state
 
 	def update(self, dt):
-		self.get_movement()
 		self.get_direction()
 		self.change_state()
 		self.state.update(dt, self)
+
+class Player(NPC):
+	def __init__(self, game, scene, groups, pos, z, name):
+		super().__init__(game, scene, groups, pos, z, name)
+
+		self.state = Idle()
+
+	def movement(self):
+		if INPUTS['left']: self.acc.x = -2000
+		elif INPUTS['right']: self.acc.x = 2000
+		else: self.acc.x = 0
+
+		if INPUTS['up']: self.acc.y = -2000
+		elif INPUTS['down']: self.acc.y = 2000
+		else: self.acc.y = 0
+
+class Idle:
+	def enter_state(self, character):
+		if character.vel.magnitude() > 1:
+			return Run()
+
+	def update(self, dt, character):
+		character.animate(f'idle_{character.get_direction()}', 15 * dt)
+		character.movement()
+		character.physics(dt)
+
+class Run:	
+	def enter_state(self, character):
+		if character.vel.magnitude() < 1:
+			return Idle()
+
+	def update(self, dt, character):
+		character.animate(f'run_{character.get_direction()}', 15 * dt)
+		character.movement()
+		character.physics(dt)
 
 

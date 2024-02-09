@@ -28,15 +28,6 @@ class Player(NPC):
 		super().__init__(game, scene, groups, pos, z, name)
 
 		self.state = Idle()
-		self.get_initial_direction()
-
-	def get_initial_direction(self):
-		#move the player slightly in the relevant direction of where they enter the room
-		scene_size = self.scene.camera.get_scene_size(self.scene)
-		if self.pos.x < TILESIZE * 4: self.vel.x = 1
-		elif self.pos.x > scene_size[0] - TILESIZE * 4: self.vel.x = -1
-		elif self.pos.y > scene_size[1]/2: self.vel.y = -1
-		else: self.vel.y = 1
 
 	def input(self):
 
