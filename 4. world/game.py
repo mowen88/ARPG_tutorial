@@ -109,7 +109,6 @@ class Game:
             self.get_inputs()
             self.states[-1].update(dt)
             self.states[-1].draw(self.screen)
-            #self.custom_cursor(screen)
             pygame.display.flip()
         
 if __name__ == "__main__":

@@ -43,21 +43,14 @@ class Scene(State):
 
 		self.game = game
 		
-		self.drawn_sprites = Camera()
+		self.camera = Camera(self)
+		self.drawn_sprites = pygame.sprite.Group()
 		self.update_sprites = pygame.sprite.Group()
 		self.block_sprites = pygame.sprite.Group()
 
 		# create all objects in the scene using tmx data
 		self.tmx_data = load_pygame(f'scenes/0/0.tmx')
 		self.create_scene()
-
-	# def get_scene_size(self):
-	# 	with open(f'../scenes/{self.current_scene}/{self.current_scene}_blocks.csv', newline='') as csvfile:
-	# 	    reader = csv.reader(csvfile, delimiter=',')
-	# 	    for row in reader:
-	# 	        rows = (sum (1 for row in reader) + 1)
-	# 	        cols = len(row)
-	# 	return (cols * TILESIZE, rows * TILESIZE)
 
 	def create_scene(self):
 
@@ -84,7 +77,7 @@ class Scene(State):
 			self.game.render_text(name, COLOURS['white'], self.game.font, (10, 15 * index), False)
 
 	def draw(self, screen):
-		self.drawn_sprites.draw(screen, self.target, self.drawn_sprites)
+		self.camera.draw(screen, self.target, self.drawn_sprites)
 		self.debug([str('FPS: '+ str(round(self.game.clock.get_fps(), 2))),
 					str('vel x: ' + str(round(self.player.vel.x, 2))),
 					str('vel y: ' + str(round(self.player.vel.y, 2)))
