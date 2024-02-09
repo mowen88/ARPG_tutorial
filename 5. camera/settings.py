@@ -13,7 +13,7 @@ COLOURS = {'black':(0,0,0), 'white':(255,255,255), 'red':(255,0,0), 'green':(0,2
 
 LAYERS = ['background',
 		  'objects',
-		  'player',
+		  'characters',
 		  'particles',
 		  'blocks',
 		  'foreground']

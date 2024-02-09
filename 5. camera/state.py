@@ -43,8 +43,7 @@ class Scene(State):
 
 		self.game = game
 		
-		self.camera = Camera()
-		self.drawn_sprites = pygame.sprite.Group()
+		self.drawn_sprites = Camera()
 		self.update_sprites = pygame.sprite.Group()
 		self.block_sprites = pygame.sprite.Group()
 
@@ -74,7 +73,7 @@ class Scene(State):
 		if 'entries' in layers:
 			for obj in self.tmx_data.get_layer_by_name('entries'):
 				if obj.name == '0':
-					self.player = Player(self.game, self, [self.update_sprites, self.drawn_sprites], (obj.x, obj.y), 'player', 'player')
+					self.player = Player(self.game, self, [self.update_sprites, self.drawn_sprites], (obj.x, obj.y), 'characters', 'player')
 					self.target = self.player
 
 	def update(self, dt):
@@ -85,7 +84,7 @@ class Scene(State):
 			self.game.render_text(name, COLOURS['white'], self.game.font, (10, 15 * index), False)
 
 	def draw(self, screen):
-		self.camera.draw(screen, self.target, self.drawn_sprites)
+		self.drawn_sprites.draw(screen, self.target, self.drawn_sprites)
 		self.debug([str('FPS: '+ str(round(self.game.clock.get_fps(), 2))),
 					str('vel x: ' + str(round(self.player.vel.x, 2))),
 					str('vel y: ' + str(round(self.player.vel.y, 2)))

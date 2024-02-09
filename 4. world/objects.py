@@ -2,7 +2,7 @@ import pygame
 from settings import *
 
 class Object(pygame.sprite.Sprite):
-	def __init__(self, groups, pos, z= LAYERS['blocks'], surf=pygame.Surface((TILESIZE, TILESIZE))):
+	def __init__(self, groups, pos, z= 'blocks', surf=pygame.Surface((TILESIZE, TILESIZE))):
 		super().__init__(groups)
 
 		self.image = surf

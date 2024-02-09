@@ -51,26 +51,26 @@ class Game:
                     self.running = False
                 elif event.key == pygame.K_SPACE:
                     INPUTS['space'] = True
-                elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                elif event.key == (pygame.K_LEFT or pygame.K_a):
                     INPUTS['left'] = True
-                elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                elif event.key == (pygame.K_RIGHT or pygame.K_d):
                     INPUTS['right'] = True
-                elif event.key == pygame.K_UP or event.key == pygame.K_w:
+                elif event.key == (pygame.K_UP or pygame.K_w):
                     INPUTS['up'] = True
-                elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                elif event.key == (pygame.K_DOWN or pygame.K_s):
                     INPUTS['down'] = True
                
             if event.type == pygame.KEYUP:
 
                 if event.key == pygame.K_SPACE:
                     INPUTS['space'] = False 
-                elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                elif event.key == (pygame.K_LEFT or pygame.K_a):
                     INPUTS['left'] = False
-                elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                elif event.key == (pygame.K_RIGHT or pygame.K_d):
                     INPUTS['right'] = False
-                elif event.key == pygame.K_UP or event.key == pygame.K_w:
+                elif event.key == (pygame.K_UP or pygame.K_w):
                     INPUTS['up'] = False
-                elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                elif event.key == (pygame.K_DOWN or pygame.K_s):
                     INPUTS['down'] = False
 
             if event.type == pygame.MOUSEWHEEL:

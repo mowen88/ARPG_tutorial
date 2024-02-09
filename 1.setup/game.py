@@ -20,9 +20,9 @@ class Game:
         rect = surf.get_rect(center = pos) if centralised else surf.get_rect(topleft = pos)
         self.screen.blit(surf, rect)
 
-    def get_inputs(self):
-    	# mapping inputs to INPUTS dictionary in global settings file, so they return true when key is pressed and false on key up.
-    	# this allows easy access to all keys using the global INPUTS dictionary
+       def get_inputs(self):
+        # mapping inputs to INPUTS dictionary in global settings file, so they return true when key is pressed and false on key up.
+        # this allows easy access to all keys using the global INPUTS dictionary
         for event in pygame.event.get(): 
             if event.type == pygame.QUIT:
                 self.running = False
@@ -35,27 +35,26 @@ class Game:
                     self.running = False
                 elif event.key == pygame.K_SPACE:
                     INPUTS['space'] = True
-                elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                elif event.key == (pygame.K_LEFT or pygame.K_a):
                     INPUTS['left'] = True
-                elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                elif event.key == (pygame.K_RIGHT or pygame.K_d):
                     INPUTS['right'] = True
-                elif event.key == pygame.K_UP or event.key == pygame.K_w:
+                elif event.key == (pygame.K_UP or pygame.K_w):
                     INPUTS['up'] = True
-                elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                elif event.key == (pygame.K_DOWN or pygame.K_s):
                     INPUTS['down'] = True
-
                
             if event.type == pygame.KEYUP:
 
                 if event.key == pygame.K_SPACE:
                     INPUTS['space'] = False 
-                elif event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                elif event.key == (pygame.K_LEFT or pygame.K_a):
                     INPUTS['left'] = False
-                elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                elif event.key == (pygame.K_RIGHT or pygame.K_d):
                     INPUTS['right'] = False
-                elif event.key == pygame.K_UP or event.key == pygame.K_w:
+                elif event.key == (pygame.K_UP or pygame.K_w):
                     INPUTS['up'] = False
-                elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                elif event.key == (pygame.K_DOWN or pygame.K_s):
                     INPUTS['down'] = False
 
             if event.type == pygame.MOUSEWHEEL:

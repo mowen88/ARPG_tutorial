@@ -11,9 +11,9 @@ INPUTS = {'escape':False, 'space':False,'up':False, 'down':False, 'left':False, 
 COLOURS = {'black':(0,0,0), 'white':(255,255,255), 'red':(255,0,0), 'green':(0,255,0),'blue':(0,0,255), 'light green':(99,196,141)}
 
 
-LAYERS = {'background':0,
-		  'objects':1,
-		  'player':2,
-		  'particles':3,
-		  'blocks':4,
-		  'foreground':5}
+LAYERS = ['background',
+		  'objects',
+		  'characters',
+		  'particles',
+		  'blocks',
+		  'foreground']
