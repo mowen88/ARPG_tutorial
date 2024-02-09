@@ -1,6 +1,17 @@
 import pygame
 from settings import *
 
+class Idle:
+		
+	def enter_state(self, chracter):
+		pass
+
+	def update(self, dt, character):
+		character.animate('idle', 15 * dt)
+		character.input()
+		character.physics(dt)
+
+
 class NPC(pygame.sprite.Sprite):
 	def __init__(self, game, scene, groups, pos, z, name):
 		super().__init__(groups)
@@ -21,8 +32,7 @@ class NPC(pygame.sprite.Sprite):
 		self.vel = pygame.math.Vector2()
 		self.speed = 60
 		self.friction = -15
-		self.facing = 0
-		self.alive = True
+		self.state = Idle()
 		
 	def import_images(self):
 		path = f'assets/characters/{self.name}/'
@@ -43,8 +53,7 @@ class NPC(pygame.sprite.Sprite):
 			else:
 				self.frame_index = len(self.animations[state]) -1
 		
-		direction = self.facing if self.facing == 1 else 0
-		self.image = pygame.transform.flip(self.animations[state][int(self.frame_index)], direction-1, False)
+		self.image = self.animations[state][int(self.frame_index)]
 
 	def get_collide_list(self, group): 
 		hitlist = []
@@ -87,12 +96,14 @@ class NPC(pygame.sprite.Sprite):
 		if self.vel.magnitude() >= self.speed: 
 			self.vel = self.vel.normalize() * self.speed
 
+	def change_state(self):
+		new_state = self.state.enter_state(self)
+		if new_state: self.state = new_state
+		else: self.state
+
 	def update(self, dt):
-		if self.vel.magnitude() < 1:
-			self.animate('idle', 15 * dt, False)
-		else:
-			self.animate('run',15 * dt)
-		self.physics(dt)
+		self.change_state()
+		self.state.update(dt, self)
 
 class Player(NPC):
 	def __init__(self, game, scene, groups, pos, z, name):
@@ -115,10 +126,5 @@ class Player(NPC):
 			self.acc.y = 0
 
 	def update(self, dt):
-		if self.vel.magnitude() < 1:
-			self.animate('idle', 15 * dt, False)
-		else:
-			self.animate('run', 15 * dt)
-		self.physics(dt)
-
-		self.input()
+		self.change_state()
+		self.state.update(dt, self)
