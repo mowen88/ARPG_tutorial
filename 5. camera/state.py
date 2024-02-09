@@ -71,13 +71,14 @@ class Scene(State):
 
 	def update(self, dt):
 		self.update_sprites.update(dt)
+		self.camera.update(dt, self.target)
 
 	def debug(self, debug_list):
 		for index, name in enumerate(debug_list):
 			self.game.render_text(name, COLOURS['white'], self.game.font, (10, 15 * index), False)
 
 	def draw(self, screen):
-		self.camera.draw(screen, self.target, self.drawn_sprites)
+		self.camera.draw(screen, self.drawn_sprites)
 		self.debug([str('FPS: '+ str(round(self.game.clock.get_fps(), 2))),
 					str('vel x: ' + str(round(self.player.vel.x, 2))),
 					str('vel y: ' + str(round(self.player.vel.y, 2)))

@@ -10,7 +10,7 @@ class NPC(pygame.sprite.Sprite):
 		self.name = name
 		self.frame_index = 0
 		self.import_images()
-		self.image = self.animations['fall'][self.frame_index].convert_alpha()
+		self.image = self.animations['idle_down'][self.frame_index].convert_alpha()
 		self.rect = self.image.get_rect(topleft = pos)
 		self.pos = pygame.math.Vector2(self.rect.center)
 		self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.5,- self.rect.height * 0.5)
@@ -66,9 +66,9 @@ class NPC(pygame.sprite.Sprite):
 
 	def update(self, dt):
 		if self.vel.magnitude() < 1:
-			self.animate('idle', 15 * dt, False)
+			self.animate('idle_right', 15 * dt, False)
 		else:
-			self.animate('run',15 * dt)
+			self.animate('run_right',15 * dt)
 		self.physics(dt)
 
 class Player(NPC):
@@ -93,9 +93,9 @@ class Player(NPC):
 
 	def update(self, dt):
 		if self.vel.magnitude() < 1:
-			self.animate('idle', 15 * dt, False)
+			self.animate('idle_right', 15 * dt, False)
 		else:
-			self.animate('run', 15 * dt)
+			self.animate('run_right',15 * dt)
 		self.physics(dt)
 
 		self.input()
