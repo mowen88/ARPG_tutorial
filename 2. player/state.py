@@ -58,5 +58,6 @@ class Scene(State):
 		self.debug([
 					str('FPS: '+ str(round(self.game.clock.get_fps(), 2))),
 					str('vel x: ' + str(round(self.player.vel.x, 2))),
-					str('vel y: ' + str(round(self.player.vel.y, 2)))
+					str('vel y: ' + str(round(self.player.vel.y, 2))),
+					str('force: ' + str(round(self.player.acc.y, 2)))
 					])

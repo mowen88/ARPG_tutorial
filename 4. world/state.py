@@ -43,7 +43,7 @@ class Scene(State):
 
 		self.game = game
 		
-		self.drawn_sprites = pygame.sprite.Group()
+		self.drawn_sprites = pygame.sprite.Group()(x,)
 		self.update_sprites = pygame.sprite.Group()
 		self.block_sprites = pygame.sprite.Group()
 

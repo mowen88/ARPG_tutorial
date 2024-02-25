@@ -47,24 +47,22 @@ class NPC(pygame.sprite.Sprite):
 		self.image = pygame.transform.flip(self.animations[state][int(self.frame_index)], direction-1, False)
 
 	def get_collide_list(self, group): 
-		hitlist = []
-		for sprite in group:
-			if sprite.hitbox.colliderect(self.hitbox): hitlist.append(sprite)
-		return hitlist
+		collidable_list = pygame.sprite.spritecollide(self, group, False)
+		return collidable_list
 
 	def collisions(self, direction, group):
-		hitlist = self.get_collide_list(group)
-		for sprite in hitlist:
-			if direction == 'x':
-				if self.vel.x >= 0: self.hitbox.right = sprite.hitbox.left
-				if self.vel.x <= 0: self.hitbox.left = sprite.hitbox.right
-				self.rect.centerx = self.hitbox.centerx
-				self.pos.x = self.hitbox.centerx
-			if direction == 'y':			
-				if self.vel.y >= 0: self.hitbox.bottom = sprite.hitbox.top	
-				if self.vel.y <= 0: self.hitbox.top = sprite.hitbox.bottom
-				self.rect.centery = self.hitbox.centery
-				self.pos.y = self.hitbox.centery
+		for sprite in self.get_collide_list(group):
+			if self.hitbox.colliderect(sprite.hitbox):
+				if direction == 'x':
+					if self.vel.x >= 0: self.hitbox.right = sprite.hitbox.left
+					if self.vel.x <= 0: self.hitbox.left = sprite.hitbox.right
+					self.rect.centerx = self.hitbox.centerx
+					self.pos.x = self.hitbox.centerx
+				if direction == 'y':			
+					if self.vel.y >= 0: self.hitbox.bottom = sprite.hitbox.top	
+					if self.vel.y <= 0: self.hitbox.top = sprite.hitbox.bottom
+					self.rect.centery = self.hitbox.centery
+					self.pos.y = self.hitbox.centery
 
 	def physics(self, dt):
 

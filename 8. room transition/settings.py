@@ -1,4 +1,4 @@
-
+from pygame.math import Vector2 as vec
 TILESIZE = 16
 
 FONT = 'assets/homespun.ttf'
@@ -16,3 +16,9 @@ LAYERS = ['background',
 		  'particles',
 		  'blocks',
 		  'foreground']
+
+SCENE_DATA = {
+			  0:{1:1, 3:2},
+			  1:{1:0, 2:2},
+			  2:{2:1, 3:0}
+			 }

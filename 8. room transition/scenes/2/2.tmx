@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="14" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="6">
+ <editorsettings>
+  <export target="2.csv" format="csv"/>
+ </editorsettings>
+ <tileset firstgid="1" source="../../../../../ARPG_tutorial/assets/tilesets/tileset_0.tsx"/>
+ <layer id="1" name="blocks" width="25" height="14">
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,2,2,2,2,
+1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,
+1,1,1,1,1,1,1,1,0,0,0,0,0,2,3,2,4,4,2,3,2,0,0,0,0,
+1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
+1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
+1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,8,1,1,0,0,0,0,0,5,
+1,1,1,1,1,1,1,1,0,0,0,8,1,1,1,1,1,1,1,1,1,8,0,0,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5
+</data>
+ </layer>
+ <objectgroup id="3" name="entries">
+  <object id="1" name="2" x="352" y="64">
+   <point/>
+  </object>
+  <object id="2" name="3" x="160" y="32">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="4" name="exits">
+  <object id="3" name="3" x="112" y="-32" width="112" height="32"/>
+  <object id="4" name="2" x="400" y="16" width="32" height="96"/>
+ </objectgroup>
+</map>

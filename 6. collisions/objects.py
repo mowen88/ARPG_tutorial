@@ -14,7 +14,7 @@ class Object(pygame.sprite.Sprite):
 class Wall(Object):
 	def __init__(self, groups, pos, z, surf):
 		super().__init__(groups, pos, z, surf)
-		self.hitbox = self.rect.copy().inflate(0, -self.rect.height * 0.5)
+		self.hitbox = self.rect.copy().inflate(0, -self.rect.height/2)
 
 class AnimatedObject(pygame.sprite.Sprite):
 	def __init__(self, game, groups, pos, z, path):

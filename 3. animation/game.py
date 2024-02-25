@@ -20,6 +20,12 @@ class Game:
         rect = surf.get_rect(center = pos) if centralised else surf.get_rect(topleft = pos)
         self.screen.blit(surf, rect)
 
+    def custom_cursor(self, screen): 
+        pygame.mouse.set_visible(False)
+        cursor = self.get_image('../assets/cursor.png', pygame.mouse.get_pos())
+        cursor[0].set_alpha(150)
+        screen.blit(cursor[0], cursor[1])
+
     def get_animation_states(self, path):
         #this loops through a folder to find all the folder names and creates an 
         animations = {}

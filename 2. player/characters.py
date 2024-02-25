@@ -11,9 +11,10 @@ class NPC(pygame.sprite.Sprite):
 		self.frame_index = 0
 		self.image = pygame.Surface((TILESIZE, TILESIZE*1.5))
 		self.image.fill(COLOURS['white'])
-		self.rect = self.image.get_rect(topleft = pos)
+		self.rect = self.image.get_frect(topleft = pos)
 		self.pos = pygame.math.Vector2(self.rect.center)
 		self.speed = 60
+		self.force = 2000
 		self.acc = pygame.math.Vector2()
 		self.vel = pygame.math.Vector2()
 		self.friction = -15
@@ -24,7 +25,7 @@ class NPC(pygame.sprite.Sprite):
 		self.acc.x += self.vel.x * self.friction
 		self.vel.x += self.acc.x * dt
 		self.pos.x += self.vel.x * dt + (0.5 * self.vel.x) * dt
-		self.rect.centerx = round(self.pos.x)
+		self.rect.centerx = self.pos.x
 
 		#y direction
 		self.acc.y += self.vel.y * self.friction
@@ -45,16 +46,16 @@ class Player(NPC):
 	def input(self):
 
 		if INPUTS['left']:
-			self.acc.x = -2000
+			self.acc.x = -self.force
 		elif INPUTS['right']:
-			self.acc.x = 2000
+			self.acc.x = self.force
 		else:
 			self.acc.x = 0
 
 		if INPUTS['up']:
-			self.acc.y = -2000
+			self.acc.y = -self.force
 		elif INPUTS['down']:
-			self.acc.y = 2000
+			self.acc.y = self.force
 		else:
 			self.acc.y = 0
 

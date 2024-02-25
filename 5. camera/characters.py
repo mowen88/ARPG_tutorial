@@ -94,7 +94,7 @@ class Player(NPC):
 
 	def update(self, dt):
 		if self.vel.magnitude() < 1:
-			self.animate('idle_right', 15 * dt, False)
+			self.animate('idle_right', 15 * dt)
 		else:
 			self.animate('run_right',15 * dt)
 		self.physics(dt)

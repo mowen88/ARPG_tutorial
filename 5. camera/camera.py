@@ -23,8 +23,8 @@ class Camera(pygame.sprite.Group):
         mouse = pygame.mouse.get_pos()
 
         # dynamic camera movement towards mouse direction based on target sprite
-        self.offset.x += (target.rect.centerx - WIDTH/2 - (WIDTH/2 - mouse[0])/4 - self.offset.x) * (self.delay * dt)
-        self.offset.y += (target.rect.centery - HEIGHT/2 - (HEIGHT/2 - mouse[1])/4 - self.offset.y) * (self.delay * dt)
+        self.offset.x += (target.rect.centerx - WIDTH/2 - (WIDTH/2 - mouse[0])/2 - self.offset.x) * (self.delay * dt)
+        self.offset.y += (target.rect.centery - HEIGHT/2 - (HEIGHT/2 - mouse[1])/2 - self.offset.y) * (self.delay * dt)
 
         # Limit offset to stop at edges
         self.offset.x = max(0, min(self.offset.x, self.scene_size[0] - WIDTH))

@@ -1,6 +1,14 @@
 import pygame
 from settings import *
 
+class Collider(pygame.sprite.Sprite):
+	def __init__(self, groups, pos, size, name):
+		super().__init__(groups)
+
+		self.image = pygame.Surface((size))
+		self.rect = self.image.get_frect(topleft = pos)
+		self.name = name
+
 class Object(pygame.sprite.Sprite):
 	def __init__(self, groups, pos, z= 'blocks', surf=pygame.Surface((TILESIZE, TILESIZE))):
 		super().__init__(groups)
