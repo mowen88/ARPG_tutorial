@@ -45,7 +45,6 @@ class Scene(State):
 
 		self.current_scene = current_scene
 		self.entry_point = entry_point
-		self.game.states.pop()
 
 		self.camera = Camera(self)
 		self.update_sprites = pygame.sprite.Group()
@@ -84,8 +83,7 @@ class Scene(State):
 
 		if 'platforms' in layers:
 			for obj in self.tmx_data.get_layer_by_name('platforms'):
-				Object([self.platform_sprites, self.drawn_sprites], (obj.x, obj.y), 'floor', pygame.image.load(f'assets/platforms/{obj.name}.png').convert_alpha())
-				print(obj.image)
+				Object([self.platform_sprites, self.drawn_sprites], (obj.x, obj.y), 'floor', obj.image)
 
 		if 'entities' in layers:
 			for obj in self.tmx_data.get_layer_by_name('entities'):
@@ -104,10 +102,13 @@ class Scene(State):
 	def draw(self, screen):
 		self.camera.draw(screen, self.drawn_sprites)
 		self.transition.draw(screen)
-
 		self.debugger([
 						str('FPS: ' + str(round(self.game.clock.get_fps(), 2))),
-						str('vel: ' + str(len(self.game.states))),
-						str('state: ' + str(self.player.get_on_floor()))
+						str('vel: ' + str(self.player.state)),
+						str('state: ' + str(self.player.rect))
 			])
+
+
+
+
 		

@@ -31,7 +31,6 @@ class Player(NPC):
 
 	def update(self, dt):
 		self.get_direction()
-		self.get_on_floor()
 		self.exit_scene()
 		self.change_state()
 		self.state.update(dt, self)
@@ -52,6 +51,7 @@ class Idle:
 
 	def update(self, dt, player):
 		player.animate(f'idle_{player.get_direction()}', 15 * dt)
+		player.on_floor()
 		player.movement()
 		player.physics(dt, player.fric)
 
@@ -71,6 +71,7 @@ class Run:
 
 	def update(self, dt, player):
 		player.animate(f'run_{player.get_direction()}', 15 * dt)
+		player.get_on_floor()
 		player.movement()
 		player.physics(dt, player.fric)
 
@@ -116,7 +117,9 @@ class Dash:
 			self.dash_pending = True
 
 		if self.timer <= 0:
-			if self.dash_pending:
+			if not player.hitbox.colliderect(player.platform.rect):
+				return Fall(player)
+			elif self.dash_pending:
 				return Dash(player)
 			else:
 				return Idle(player)
@@ -129,10 +132,29 @@ class Dash:
 			player.physics(dt, 0)
 		else:
 			player.physics(dt, -30)
+
 		player.acc = vec()
 		player.vel = self.vel
 
+class Fall:
+	def __init__(self, player):
+		Idle.__init__(self, player)
+		self.timer = 1
+		self.hitbox = player.hitbox.copy().inflate(-player.hitbox.width*0.75,-player.hitbox.height*0.75)
+		self.hitbox.center = player.hitbox.center
+
+	def enter_state(self, player):
+		for platform in player.scene.platform_sprites:
+			if self.hitbox.colliderect(platform.rect) or self.timer <= 0:
+				return Idle(player)
+
 		
+
+	def update(self, dt, player):
+
+		self.timer -= dt
+		player.animate(f'fall_{player.get_direction()}', 15 * dt, False)
+		player.vel = vec()
 		
 
 		

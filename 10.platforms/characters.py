@@ -49,17 +49,32 @@ class NPC(pygame.sprite.Sprite):
 		elif 225 <= angle < 315: return 'left'
 		else: return 'down'
 
+	def on_floor(self):
+		if self.platform:
+			if self.hitbox.colliderect(self.platform.rect):
+				return False
+			else:
+				return True
+
 	def get_on_floor(self):
 		for platform in self.scene.platform_sprites:
 			if self.hitbox.colliderect(platform.rect):
 				self.platform = platform
 
-			if self.platform is not None:
-				if self.platform.rect.top - self.hitbox.height + 1 < self.hitbox.bottom < self.platform.rect.bottom\
-				and self.platform.rect.left < self.hitbox.left and self.platform.rect.right > self.hitbox.right:
-					return True
-			else:
-				return False
+		if self.platform is not None:
+			if self.hitbox.left < self.platform.rect.left and self.vel.x < 0:
+				self.hitbox.left = self.platform.rect.left
+				self.rect.centerx = self.hitbox.centerx
+			elif self.hitbox.right > self.platform.rect.right and self.vel.x > 0:
+				self.hitbox.right = self.platform.rect.right
+				self.rect.centerx = self.hitbox.centerx
+			if self.hitbox.bottom < self.platform.rect.top + 4 and self.vel.y < 0:
+				self.hitbox.bottom = self.platform.rect.top + 4
+				self.rect.centery = self.hitbox.centery
+			elif self.hitbox.bottom > self.platform.rect.bottom - 4 and self.vel.y > 0:
+				self.hitbox.bottom = self.platform.rect.bottom - 4
+				self.rect.centery = self.hitbox.centery
+
 
 	def movement(self):
 		if self.move['left']: self.acc.x = -self.force
@@ -111,7 +126,7 @@ class NPC(pygame.sprite.Sprite):
 
 	def update(self, dt):
 		self.get_direction()
-		self.get_on_floor()
+		self.on_floor()
 		self.change_state()
 		self.state.update(dt, self)
 
