@@ -62,16 +62,16 @@ class NPC(pygame.sprite.Sprite):
 				self.platform = platform
 
 		if self.platform is not None:
-			if self.hitbox.left < self.platform.rect.left and self.vel.x < 0:
+			if self.hitbox.left < self.platform.rect.left and self.vel.x <= 0:
 				self.hitbox.left = self.platform.rect.left
 				self.rect.centerx = self.hitbox.centerx
-			elif self.hitbox.right > self.platform.rect.right and self.vel.x > 0:
+			elif self.hitbox.right > self.platform.rect.right and self.vel.x >= 0:
 				self.hitbox.right = self.platform.rect.right
 				self.rect.centerx = self.hitbox.centerx
-			if self.hitbox.bottom < self.platform.rect.top + 4 and self.vel.y < 0:
+			if self.hitbox.bottom < self.platform.rect.top + 4 and self.vel.y <= 0:
 				self.hitbox.bottom = self.platform.rect.top + 4
 				self.rect.centery = self.hitbox.centery
-			elif self.hitbox.bottom > self.platform.rect.bottom - 4 and self.vel.y > 0:
+			elif self.hitbox.bottom > self.platform.rect.bottom - 4 and self.vel.y >= 0:
 				self.hitbox.bottom = self.platform.rect.bottom - 4
 				self.rect.centery = self.hitbox.centery
 

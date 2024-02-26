@@ -111,6 +111,8 @@ class Dash:
 		self.timer = 0.4
 		self.dash_pending = False
 		self.vel = player.vec_to_mouse(200)
+		player.vel = self.vel
+		self.direction = player.get_direction()
 
 	def enter_state(self, player):
 		if INPUTS['right_click']:
@@ -127,7 +129,7 @@ class Dash:
 	def update(self, dt, player):
 
 		self.timer -= dt
-		player.animate(f'attack_{player.get_direction()}', 15 * dt, False)
+		player.animate(f'attack_{self.direction}', 15 * dt, False)
 		if self.timer > 0.2:
 			player.physics(dt, 0)
 		else:
@@ -142,19 +144,18 @@ class Fall:
 		self.timer = 1
 		self.hitbox = player.hitbox.copy().inflate(-player.hitbox.width*0.75,-player.hitbox.height*0.75)
 		self.hitbox.center = player.hitbox.center
+		self.direction = player.get_direction()
 
 	def enter_state(self, player):
 		for platform in player.scene.platform_sprites:
 			if self.hitbox.colliderect(platform.rect) or self.timer <= 0:
 				return Idle(player)
 
-		
-
 	def update(self, dt, player):
 
 		self.timer -= dt
-		player.animate(f'fall_{player.get_direction()}', 15 * dt, False)
-		player.vel = vec()
+		player.animate(f'fall_{self.direction}', 15 * dt, False)
+		player.vel = vec(0,80)
 		
 
 		
